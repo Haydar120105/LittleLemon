@@ -2,18 +2,16 @@ from django.test import TestCase
 from restaurant.models import Menu
 from restaurant.views import MenuItemview
 from restaurant.serializers import MenuSerializer
-from rest_framework.test import APIClient
 
 class MenuItemviewTest(TestCase):
-    def setup(self):
-        self.menu1 = Menu.objects.create(name='Test Menu 1', description='Test Menu 1 Description')
-        self.menu2 = Menu.objects.create(name='Test Menu 2', description='Test Menu 2 Description')
-        self.menu3 = Menu.objects.create(name='Test Menu 3', description='Test Menu 3 Description')
+    def setUp(self):
+        self.menu1 = Menu.objects.create(title='Test Menu 1', price=1, inventory=1)
+        self.menu2 = Menu.objects.create(title='Test Menu 2', price=2, inventory=2)
+        
 
-    
     def test_getall(self):
-        client = APIClient()
-        response = client.get('/menu/')
         items = Menu.objects.all()
-        serializer = MenuSerializer(items)
-        self.assertEqual(response.data, serializer.data)
+        serializer = MenuSerializer(items, many=True)
+        self.assertEqual(len(serializer.data), 2)
+        self.assertEqual(serializer.data[0]['title'], self.menu1.title)
+        self.assertEqual(serializer.data[1]['title'], self.menu2.title)

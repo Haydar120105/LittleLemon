@@ -8,4 +8,6 @@ class MenuTest(TestCase):
             price=10.99,
             inventory=5
         )
-        self.assertEqual(item, "test menu : 10.99 : 5")
+        self.assertEqual(item.title == "test menu", True)
+        self.assertEqual(item.price == 10.99, True)
+        self.assertEqual(item.inventory == 5, True)
